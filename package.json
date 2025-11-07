@@ -1,0 +1,56 @@
+{
+  "name": "@hono/zod-asyncapi",
+  "version": "0.1.0",
+  "description": "A Hono package for generating AsyncAPI specifications for WebSocket routes with Zod validation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "lint": "eslint src",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "hono",
+    "asyncapi",
+    "websocket",
+    "zod",
+    "validation",
+    "api",
+    "documentation"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.1.0"
+  },
+  "peerDependencies": {
+    "hono": ">=4.3.6",
+    "zod": "^3.0.0 || ^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "eslint": "^8.56.0",
+    "hono": "^4.10.1",
+    "prettier": "^3.2.4",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4",
+    "zod": "^4.0.5"
+  }
+}
