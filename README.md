@@ -10,6 +10,7 @@ A Hono package for generating AsyncAPI specifications for WebSocket routes with 
 - 📝 **Type Safety** - Full TypeScript support with automatic type inference
 - 🎯 **Easy to Use** - Simple API similar to `@hono/zod-openapi`
 - 📚 **Documentation Generation** - Auto-generate API documentation from your code
+- 🔄 **OpenAPI Integration** - Works seamlessly with `@hono/zod-openapi` for unified REST + WebSocket APIs
 
 ## Installation
 
@@ -77,6 +78,138 @@ app.channel('chatRoom', chatChannel, (ws, message, ctx) => {
 app.doc('/asyncapi.json')
 
 export default app
+```
+
+## Integration with @hono/zod-openapi
+
+Combine REST APIs (OpenAPI) and WebSocket APIs (AsyncAPI) in a single application:
+
+```bash
+npm install @hono/zod-asyncapi @hono/zod-openapi hono zod
+```
+
+### Option 1: Merge Separate Apps
+
+```typescript
+import { OpenAPIHono, createRoute, z as openAPIZ } from '@hono/zod-openapi'
+import { AsyncAPIHono, createChannel, z, mergeAPIDocs } from '@hono/zod-asyncapi'
+
+// Create REST API with OpenAPI
+const restAPI = new OpenAPIHono()
+
+const getUserRoute = createRoute({
+  method: 'get',
+  path: '/api/users/:id',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: openAPIZ.object({
+            id: openAPIZ.string(),
+            name: openAPIZ.string(),
+          }),
+        },
+      },
+      description: 'User details',
+    },
+  },
+})
+
+restAPI.openapi(getUserRoute, (c) => {
+  return c.json({ id: '123', name: 'Alice' })
+})
+
+// Create WebSocket API with AsyncAPI
+const wsAPI = new AsyncAPIHono({
+  info: {
+    title: 'WebSocket API',
+    version: '1.0.0',
+  },
+})
+
+const chatChannel = createChannel({
+  path: '/ws/chat/:roomId',
+  send: {
+    payload: z.object({
+      message: z.string(),
+      userId: z.string(),
+    }),
+  },
+})
+
+wsAPI.channel('chat', chatChannel, (ws, message, ctx) => {
+  console.log(`Chat message in room ${ctx.params.roomId}`)
+  ws.send({ message: 'Hello!', userId: 'system' })
+})
+
+// Merge both APIs
+const app = mergeAPIDocs(restAPI, wsAPI)
+
+// Serve both documentations
+app.doc('/api/openapi.json')         // OpenAPI spec for REST
+app.asyncapiDoc('/api/asyncapi.json') // AsyncAPI spec for WebSocket
+
+export default app
+```
+
+### Option 2: Unified API App
+
+```typescript
+import { UnifiedAPIHono, createChannel, z } from '@hono/zod-asyncapi'
+
+const app = new UnifiedAPIHono({
+  openapi: {
+    info: { title: 'My API', version: '1.0.0' },
+  },
+  asyncapi: {
+    info: { title: 'My WebSocket API', version: '1.0.0' },
+  },
+})
+
+// Add WebSocket channels
+const channel = createChannel({
+  path: '/ws/events',
+  send: { payload: z.object({ event: z.string() }) },
+})
+
+app.channel('events', channel)
+
+// Serve both docs
+app.docs('/api/openapi.json', '/api/asyncapi.json')
+```
+
+### Unified Configuration Helpers
+
+```typescript
+import { createUnifiedInfo, createUnifiedServers } from '@hono/zod-asyncapi'
+
+// Create consistent info for both specs
+const info = createUnifiedInfo({
+  title: 'My API',
+  version: '1.0.0',
+  description: 'REST and WebSocket API',
+  contact: {
+    name: 'API Team',
+    email: 'api@example.com',
+  },
+})
+
+// Create server configs for both HTTP and WebSocket
+const servers = createUnifiedServers({
+  http: {
+    url: 'https://api.example.com',
+    description: 'Production HTTP server',
+  },
+  ws: {
+    host: 'ws.example.com',
+    protocol: 'wss',
+    description: 'Production WebSocket server',
+  },
+})
+
+// Use in your apps
+const restAPI = new OpenAPIHono({ openapi: { ...info.openapi, servers: servers.openapi } })
+const wsAPI = new AsyncAPIHono({ info: info.asyncapi, servers: servers.asyncapi })
 ```
 
 ## API Reference
