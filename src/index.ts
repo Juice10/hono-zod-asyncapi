@@ -20,6 +20,14 @@ export type { GeneratorOptions } from './generator'
 // Zod integration
 export { z, zodToAsyncAPISchema } from './zod-to-schema'
 
+// Integration with @hono/zod-openapi
+export {
+  UnifiedAPIHono,
+  mergeAPIDocs,
+  createUnifiedInfo,
+  createUnifiedServers,
+} from './integration'
+
 // Type exports
 export type {
   // AsyncAPI Document types
