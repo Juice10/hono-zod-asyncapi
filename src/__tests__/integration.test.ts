@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { OpenAPIHono, createRoute, z as openAPIZ } from '@hono/zod-openapi'
 import {
   AsyncAPIHono,
