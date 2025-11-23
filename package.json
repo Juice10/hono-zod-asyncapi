@@ -39,7 +39,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.1.0"
