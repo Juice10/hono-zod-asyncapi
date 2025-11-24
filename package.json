@@ -1,6 +1,6 @@
 {
   "name": "@juice10/hono-zod-asyncapi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Hono package for generating AsyncAPI specifications for WebSocket routes with Zod validation",
   "type": "module",
   "main": "./dist/index.js",
