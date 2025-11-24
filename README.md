@@ -1,4 +1,4 @@
-# @hono/zod-asyncapi
+# @juice10/hono-zod-asyncapi
 
 A Hono package for generating AsyncAPI specifications for WebSocket routes with Zod validation.
 
@@ -15,13 +15,13 @@ A Hono package for generating AsyncAPI specifications for WebSocket routes with 
 ## Installation
 
 ```bash
-npm install @hono/zod-asyncapi hono zod
+npm install @juice10/hono-zod-asyncapi hono zod
 ```
 
 ## Quick Start
 
 ```typescript
-import { AsyncAPIHono, createChannel, z } from '@hono/zod-asyncapi'
+import { AsyncAPIHono, createChannel, z } from '@juice10/hono-zod-asyncapi'
 
 // Create an AsyncAPI-enabled Hono app
 const app = new AsyncAPIHono({
@@ -85,14 +85,14 @@ export default app
 Combine REST APIs (OpenAPI) and WebSocket APIs (AsyncAPI) in a single application:
 
 ```bash
-npm install @hono/zod-asyncapi @hono/zod-openapi hono zod
+npm install @juice10/hono-zod-asyncapi @hono/zod-openapi hono zod
 ```
 
 ### Option 1: Merge Separate Apps
 
 ```typescript
 import { OpenAPIHono, createRoute, z as openAPIZ } from '@hono/zod-openapi'
-import { AsyncAPIHono, createChannel, z, mergeAPIDocs } from '@hono/zod-asyncapi'
+import { AsyncAPIHono, createChannel, z, mergeAPIDocs } from '@juice10/hono-zod-asyncapi'
 
 // Create REST API with OpenAPI
 const restAPI = new OpenAPIHono()
@@ -155,7 +155,7 @@ export default app
 ### Option 2: Unified API App
 
 ```typescript
-import { UnifiedAPIHono, createChannel, z } from '@hono/zod-asyncapi'
+import { UnifiedAPIHono, createChannel, z } from '@juice10/hono-zod-asyncapi'
 
 const app = new UnifiedAPIHono({
   openapi: {
@@ -181,7 +181,7 @@ app.docs('/api/openapi.json', '/api/asyncapi.json')
 ### Unified Configuration Helpers
 
 ```typescript
-import { createUnifiedInfo, createUnifiedServers } from '@hono/zod-asyncapi'
+import { createUnifiedInfo, createUnifiedServers } from '@juice10/hono-zod-asyncapi'
 
 // Create consistent info for both specs
 const info = createUnifiedInfo({
@@ -294,7 +294,7 @@ type ChannelHandler = (
 ### Basic WebSocket Channel
 
 ```typescript
-import { AsyncAPIHono, createChannel, z } from '@hono/zod-asyncapi'
+import { AsyncAPIHono, createChannel, z } from '@juice10/hono-zod-asyncapi'
 
 const app = new AsyncAPIHono()
 
@@ -395,7 +395,7 @@ app.doc('/asyncapi.json')
 ### Custom Server Configuration
 
 ```typescript
-import { createWebSocketServer, createSecureWebSocketServer } from '@hono/zod-asyncapi'
+import { createWebSocketServer, createSecureWebSocketServer } from '@juice10/hono-zod-asyncapi'
 
 const app = new AsyncAPIHono({
   info: {
